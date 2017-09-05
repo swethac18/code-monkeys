@@ -1,0 +1,11 @@
+---
+- name: Install a webserver and set up a hello world page
+  hosts: webservers
+  become: yes
+  remote_user: osboxes
+  become_user: root
+  become_method: sudo
+
+  roles:
+    - apache2-deploy
+

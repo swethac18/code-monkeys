@@ -2,7 +2,7 @@
 - name: Install a webserver and set up a hello world page
   hosts: webservers
   become: yes
-  remote_user: osboxes
+  remote_user: ubuntu
   become_user: root
   become_method: sudo
 

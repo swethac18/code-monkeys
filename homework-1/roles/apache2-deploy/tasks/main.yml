@@ -1,8 +1,0 @@
----
-- name: install apache2
-  apt: pkg=apache2 state=installed update_cache=true
-  notify:
-    - start apache2
-
-- name: deploy hello-world
-  template: src=index.html dest=/var/www/html/

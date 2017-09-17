@@ -1,0 +1,15 @@
+---
+- name: ship index.html
+  template: src=index.html dest=/tmp
+
+- name: deploy nginx container
+  docker_container:
+    name: nginx
+    image: nginx
+    state: started
+    recreate: no
+    restart_policy: always
+    ports:
+      - "80:80"
+    volumes:
+      - "/tmp/index.html:/usr/share/nginx/html/index.html:ro" 

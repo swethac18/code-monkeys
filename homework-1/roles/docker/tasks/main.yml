@@ -1,0 +1,13 @@
+---
+- name: install docker
+  apt: pkg={{item}} state=installed update_cache=true
+  with_items:
+    - python-pip
+    - docker.io
+    - docker
+  notify:
+    - start docker
+
+- name: install docker-py pip
+  pip:
+    name: docker-py

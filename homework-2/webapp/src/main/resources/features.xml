@@ -1,0 +1,7 @@
+<!-- @author Vijay Samuel -->
+<features>
+    <feature name="twitter-webapp" version="${pom.version}">
+        <feature>war</feature>
+        <bundle>mvn:${groupId}/webapp/${pom.version}</bundle>
+    </feature>
+</features>

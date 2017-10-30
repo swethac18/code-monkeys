@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @author Vijay Samuel -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+	<bean id="uiServlet" class="edu.sjsu.twitter.webapp.UiServlet">
+	</bean>
+	<service ref="uiServlet" interface="javax.servlet.http.HttpServlet">
+		<service-properties>
+			<entry key="alias" value="/" />
+		</service-properties>
+	</service>
+</blueprint>

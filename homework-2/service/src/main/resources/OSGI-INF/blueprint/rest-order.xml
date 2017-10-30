@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Author: Vijay Samuel -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xsi:schemaLocation="
+             http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+             http://camel.apache.org/schema/blueprint/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+             http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+             http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://svn.apache.org/repos/asf/aries/trunk/blueprint/blueprint-cm/src/main/resources/org/apache/aries/blueprint/compendium/cm/blueprint-cm-1.1.0.xsd
+             ">
+             
+    <cm:property-placeholder persistent-id="TwitterConfig" update-strategy="reload" >
+	</cm:property-placeholder>
+
+  <bean id="service" class="edu.sjsu.twitter.service.TwitterService" init-method="setupTwitterService"/>
+
+  <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+
+	<bean id="TwitterConfig" class="edu.sjsu.twitter.bean.TwitterConfig">
+  		<property name="consumerKey" value="${consumerKey}"/>
+  		<property name="consumerSecret" value="${consumerSecret}"/>
+  		<property name="accessToken" value="${accessToken}"/>
+  		<property name="accessTokenSecret" value="${accessTokenSecret}"/>
+  	</bean>
+
+  <!-- CXF-RS server as a bean where we setup the REST web service using the resource class
+       and can do additional configurations -->
+  <cxf:rsServer id="restTwitterServer" address="/service"
+                serviceClass="edu.sjsu.twitter.service.RestTwitterService">
+    <cxf:providers>
+      <ref component-id="jsonProvider" />
+    </cxf:providers>
+  </cxf:rsServer>
+
+  <camelContext id="camel" xmlns="http://camel.apache.org/schema/blueprint">
+
+    <route>
+      <!-- use cxfrs:bean and enable the simple binding style -->
+      <from uri="cxfrs:bean:restTwitterServer?bindingStyle=SimpleConsumer"/>
+      <!-- call the route based on the operation invoked on the REST web service -->
+      <toD uri="direct:${header.operationName}"/>
+    </route>
+
+    <!-- routes that implement the REST services -->
+    <route>
+      <from uri="direct:getHomeTimeline"/>
+      <bean ref="service" method="getHomeTimeline"/>
+    </route>
+    <route>
+      <from uri="direct:getMentions"/>
+      <bean ref="service" method="getMentions"/>
+    </route>
+    <route>
+      <from uri="direct:getTrends"/>
+      <bean ref="service" method="getTrends"/>
+    </route>
+    <route>
+      <from uri="direct:userSuggestions"/>
+      <bean ref="service" method="userSuggestions"/>
+    </route>
+    <route>
+      <from uri="direct:getTwitterUsers"/>
+      <bean ref="service" method="getTwitterUsers"/>
+    </route>
+    <route>
+      <from uri="direct:getMyReTweets"/>
+      <bean ref="service" method="getMyReTweets"/>
+    </route>
+    <route>
+      <from uri="direct:getFavourites"/>
+      <bean ref="service" method="getFavourites"/>
+    </route>
+    <route>
+      <from uri="direct:getAvailableTrends"/>
+      <bean ref="service" method="getAvailableTrends"/>
+    </route>
+  </camelContext>
+
+</blueprint>

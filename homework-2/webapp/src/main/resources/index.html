@@ -1,0 +1,269 @@
+<!-- @author Harani Balakrishnan -->
+
+<html>
+<head> <title> Apache Karaf project using Twitter APIs </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<style>
+	div.container {
+	    width: 100%;
+	    border: 1px solid gray;
+	}
+
+	header, footer {
+	    padding: 1em;
+	    color: white;
+	    background-color: black;
+	    clear: left;
+	    text-align: center;
+	}
+
+	nav {
+	    float: left;
+	    max-width: 160px;
+	    margin: 0;
+	    padding: 1em;
+	}
+
+	nav ul {
+	    list-style-type: none;
+	    padding: 0;
+	}
+
+	nav ul a {
+	    text-decoration: none;
+	}
+
+	article {
+	    margin-left: 170px;
+	    border-left: 1px solid gray;
+	    padding: 1em;
+	    overflow: hidden;
+	}
+
+    blockquote.twitter-tweet {
+	  display: inline-block;
+	  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+	  font-size: 12px;
+	  font-weight: bold;
+	  border-color: #eee #ddd #bbb;
+	  border-radius: 5px;
+	  border-style: solid;
+	  border-width: 1px;
+	  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+	  margin: 10px 5px;
+	  padding: 0 10px 10px 10px;
+	  max-width: 100%;
+	}
+
+	blockquote.twitter-tweet p {
+	  font-size: 16px;
+	  font-weight: normal;
+	  line-height: 20px;
+	}
+
+	</style>
+</head>
+<body>
+	<div class="container" ng-app="myApp" ng-controller="myCtrl">
+
+		<header>
+		   <h1>Apache Karaf project using Twitter APIs</h1>
+		</header>
+
+		<nav>
+		  <ul>
+			  <li><button type="button" ng-click="homeTimeline()">Home Timeline</button></li>
+			  <li><button type="button" ng-click="trendsList()">Trends</button></li>
+			  <li><button type="button" ng-click="statusMention()">Status Mentions</button></li>
+			  <li><button type="button" ng-click="userSuggestions()">User Suggestions</button></li>
+			  <!-- Create a method (any name same as that you are using inside angular module)and call it in the ng-click here. Provide a button name instead of API-5 -->
+			  <li><button type="button" ng-click="getMyFavorites()">get my Favorites</button></li>
+			  <li><button type="button" ng-click="allAvailableTrends()">Trending cities worldwide</button></li>
+			  <li><button type="button" ng-click="retweetsofme()">show all my retweets</button></li>
+			  <li><button type="button" ng-click="CelebrityLookUp()">Celebrity Lookup</button></li>
+		  </ul>
+		</nav>
+<!-- DON'T CHANGE ANYTHING HERE-->
+		<article>
+		  <blockquote class="twitter-tweet" ng-repeat="tweet in displayData track by $index"> <p> {{tweet}} </p></blockquote>
+		</article>
+
+		<footer>Copyright &copy; Code Monkeys</footer>
+	</div>
+<script>
+  var app = angular.module('myApp', []);
+  app.controller('myCtrl', function($scope, $http) {
+
+		//@author Harani Balakrishnan
+	    $scope.homeTimeline = function() {
+		    $http({
+		        method: 'GET',
+		        url: 'http://localhost:8181/cxf/service/api/v1/tweets/home_timeline'
+	        }).then( function successCallback(response) {
+	           $scope.displayData = [];
+	           angular.forEach(response, function(tweetsList){
+	             angular.forEach(tweetsList, function(eachTweet){
+	                $scope.displayData.push(eachTweet.text);
+	             });
+	           });
+		       },function errorCallback(response) {
+	           $scope.displayData = ['Sorry, cannot display the Home Timeline Tweets'];
+	        });
+	    };
+		// @author Harani Balakrishnan
+	    $scope.trendsList = function() {
+	       $http({
+		        method: 'GET',
+		        url: 'http://localhost:8181/cxf/service/api/v1/tweets/trends'
+	        }).then( function successCallback(response) {
+	           $scope.displayData = [];
+	           angular.forEach(response.data, function(trendsList){
+	             angular.forEach(trendsList.trends, function(eachTrend){
+	                $scope.finalTrend = 'Name: '+ eachTrend.name + 'URL: '+ eachTrend.url + 'Like: ' + eachTrend.tweet_volume;
+	                $scope.displayData.push($scope.finalTrend);
+	             });
+	           });
+		       },function errorCallback(response) {
+	           $scope.displayData = ['Sorry, cannot display the Trends'];
+	        });
+	    };
+
+		// @author Yamini Muralidharen
+	    $scope.getMyFavorites = function() {
+		$http({
+		        method: 'GET',
+		        url: 'http://localhost:8181/cxf/service/api/v1/tweets/getmyFavorites'
+	        }).then( function successCallback(response) {
+	           $scope.displayData = [];
+		   angular.forEach(response.data,function(eachItem){
+			$scope.finalList = eachItem.text;
+			$scope.displayData.push($scope.finalList);
+
+		      });
+		       },function errorCallback(response) {
+	           $scope.displayData = ['Sorry, cannot display the favorites'];
+	        });
+
+	    };
+		
+		// @author Yamini Muralidharen
+	    $scope.allAvailableTrends = function() {
+	       $http({
+		        method: 'GET',
+		        url: 'http://localhost:8181/cxf/service/api/v1/tweets/availableTrends'
+	        }).then( function successCallback(response) {
+	           $scope.displayData = [];
+		   angular.forEach(response.data,function(eachItem){
+			$scope.finalList ='Country:' + eachItem.country+ ' City:' + eachItem.name;
+			$scope.displayData.push($scope.finalList);
+
+		      });
+		       },function errorCallback(response) {
+	           $scope.displayData = ['Sorry, cannot display the Trends'];
+	        });
+	    };
+
+	   // @author Harani Balakrishnan
+	    $scope.statusMention = function() {
+		    $http({
+			      method: 'GET',
+			      url: 'http://localhost:8181/cxf/service/api/v1/tweets/mentions_timeline'
+		      }).then( function successCallback(response) {
+		          $scope.displayData = [];
+		          angular.forEach(response, function(tweetsList){
+		           angular.forEach(tweetsList, function(eachTweet){
+		              $scope.displayData.push(eachTweet.text);
+		           });
+		          });
+			      },function errorCallback(response) {
+		          $scope.displayData = ['Sorry, cannot display the Tweets Mentions'];
+		     });
+	    };
+	   
+	   // @author Swetha Chandrasekar
+	    $scope.retweetsofme = function() {
+		    $http({
+			      method: 'GET',
+			      url: 'http://localhost:8181/cxf/service/api/v1/tweets/retweetsofme'
+		      }).then( function successCallback(response) {
+		          $scope.displayData = [];
+		          angular.forEach(response, function(tweetsList){
+		           angular.forEach(tweetsList, function(eachTweet){
+		              $scope.displayData.push(eachTweet.text  + ' ' +  eachTweet.createdAt);
+		           });
+		          });
+			      },function errorCallback(response) {
+		          $scope.displayData = ['Sorry, cannot display the Tweets Mentions'];
+		     });
+	    };
+
+	    
+	    // @author Swetha Chandrasekar
+	    $scope.CelebrityLookUp = function() {
+		    $http({
+			      method: 'GET',
+			      url: 'http://localhost:8181/cxf/service/api/v1/tweets/lookup_users'
+		      }).then( function successCallback(response) {
+			      $scope.displayData = [];
+
+
+			 angular.forEach(response.data, function(eachItem){
+		         // finalList is a variable in which I have concatenated the output in one line. You can change it based on your POJO output.
+		          $scope.finalList = 'Name: ' + eachItem.name + '  description:  ' + eachItem.description + 'Status:' + eachItem.status.text;
+		        // Finally push your "each tweet/output" in the displayData variable.
+		              $scope.displayData.push($scope.finalList);
+		          });
+
+		          }
+			  ,function errorCallback(response) {
+			  $scope.displayData = ['Sorry, no celebrity lookup'];
+		     });
+	    };
+	    // @author Harani Balakrishnan
+      	// Use the same function name as that you are using inside the button for ng-click
+	    $scope.userSuggestions = function() {
+		    $http({
+			      method: 'GET',
+			      // Make sure you API is a GET request and put your output URL path here
+			      url: 'http://localhost:8181/cxf/service/api/v1/tweets/user_suggests'
+		      }).then( function successCallback(response) {
+		      	// First try to display the POJO when the button is clicked in the UI
+		      	// $scope.displayData = response;
+		      	// Once you got the POJO  in the UI, we can make it prettier using below code
+		      	// Try to put your values inside an array. Because I have designed HTML common for all API responses and so use [] and .push to displayData. Please use the same name (i.e) displayData. Because its common for all APIs in HTML. Refer line 86
+		          $scope.displayData = [];
+
+		         // The below code is similar to for loop used to iterate through the array. Where response.data has key as data and the value is the array of tweets here. This may vary based on the API you use.
+		          angular.forEach(response.data, function(eachItem){
+		         // finalList is a variable in which I have concatenated the output in one line. You can change it based on your POJO output.
+		              $scope.finalList = 'Name: ' + eachItem.name + '  Size:  ' + eachItem.size;
+		        // Finally push your "each tweet/output" in the displayData variable.
+		              $scope.displayData.push($scope.finalList);
+		          });
+			      },function errorCallback(response) {
+		          $scope.displayData = ['Sorry, cannot display the Suggestions'];
+		         // Just use the same error data as above. Change the string "cannot display the <your API name >"
+		     });
+	    };
+	   // Try to use same code as that of line 144-157(or any of the functions above)
+	   // Read each lines purpose and meaning. If confused, copy the main command and search it in Google.
+	   // Try to see your out put POJO object in the page buy displaying the response. " $scope.displayData = response ;"
+	   //  Then try to design that POJO which may be generally an array of key:value pairs in a pretty UI as above.
+  });
+</script>
+</body>
+</html>
+
+
+<!--
+DEFINITIONS:
+A plain old Java object (POJO) is an ordinary Java object, not bound by any special restriction and not requiring any class path.
+
+Advantage:
+A POJO-driven approach means writing your message handling solution free of interfaces.
+ By using plain old Java objects, your code can be much simpler. This lends itself to better testing, flexibility, and ability to make new decisions in the future.
+
+The process of saving the Objects to corresponding data store is called serialization.
+
+The process of loading or populated objects from saved data is known as deserialization.
+ -->

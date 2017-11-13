@@ -1,4 +1,4 @@
-testing jenkins..
+Testing jenkins..
 to deploy:
 ansible-playbook -i ./hosts deploy.yml
 --------------------------------------------

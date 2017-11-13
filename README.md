@@ -7,3 +7,4 @@ ansible-playbook -i ./hosts undeploy.yml
 ------------------------------------------------------
 
 Please refer to homework-1 screenshot.png file for the output
+-----------------------------------------------------------------------

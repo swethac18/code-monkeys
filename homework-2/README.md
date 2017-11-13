@@ -10,7 +10,7 @@ These are required to get passing test cases and to deploy an application that c
 To build this project run:
 
 ```
-git clone https://github.com/vjsamuel/code-monkeys
+git clone https://github.com/swethac18/code-monkeys
 cd code-monkeys/homework-2
 mvn clean install
 ```

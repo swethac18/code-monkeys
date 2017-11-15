@@ -1,4 +1,5 @@
-Testing jenkins (EC2) testing again
+Integrated Github with Jenkins
+
 to deploy:
 ansible-playbook -i ./hosts deploy.yml
 --------------------------------------------

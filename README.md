@@ -1,4 +1,4 @@
-Testing jenkins..
+Testing jenkins (EC2)
 to deploy:
 ansible-playbook -i ./hosts deploy.yml
 --------------------------------------------

@@ -1,0 +1,76 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">S3URL</a>
+    </div>
+     <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>  
+    </div>
+</nav>
+
+
+<h3>Hi {{vm.user.firstName}}!</h3>
+<p>You're logged in!!</p>
+<p>{{vm.apiresponse.id}}</p>
+<p>{{vm.apiresponse.content}}</p>
+
+ <!--  <div class="jumbotron text-center"> -->
+   <form class="form-inline text-center">
+    <div class="input-group">
+      <input type="text" ng-model ="vm.textURL" class="form-control required" size="50" placeholder="Enter URL to shorten" >
+      <div class="input-group-btn">
+        <button type="button" ng-click="vm.shortenURL()" class="btn btn-warning">Shorten URL</button>
+      </div>
+    </div>
+  </form>
+   <table class="table table-hover table-responsive">
+    <thead>
+      <tr>
+        <th>Long URL</th>
+        <th>Short URL</th>
+        <th>edit</th>
+        <th>Delete</th>
+        <th>Share</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="url in vm.generatedURL">
+        <td><a ng-href="{{url.originalURL}}" editable-text="url.originalURL" e-form="textBtnForm" onaftersave="vm.editUrl(url)" target="_blank">{{url.originalURL || 'empty'}}</a></td>
+        <td><a ng-href="" ng-click="vm.expandURL(url)" style="cursor:pointer; " >{{url.shorternedURL}}</a></td>
+       
+        <!-- <td> <button type="button" class="btn btn-info btn-sm" ng-click="vm.editUrl(url)">
+          <span class="glyphicon glyphicon-edit"></span> Edit 
+        </button> </td> -->
+        <td> <button type="button" class="btn btn-info btn-sm" ng-click="textBtnForm.$show()" ng-hide="textBtnForm.$visible">
+          <span class="glyphicon glyphicon-edit"></span> Edit 
+        </button> </td>
+        <td> <button type="button" class="btn btn-danger btn-sm" ng-click="vm.deleteUrl(url)">
+          <span class="glyphicon glyphicon-trash"></span> Delete 
+        </button> </td>
+        <td><a class="twitter-share-button"
+  href="https://twitter.com/share?ref_src=twsrc%5Etf}w"
+  data-show-count="false"
+  data-size="large"
+  data-text="{{url.shorternedURL}}"
+  data-url="{{url.shorternedURL}}"
+  data-hashtags="Generate your short ,simple url and share it "
+  data-via="S3URL"
+  data-related="twitterapi,twitter">
+Tweet
+</a>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> </td>
+     
+      </tr>
+</tbody>
+</table>
+       
+    <span class="paypalbutton">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="popup" >
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="ZQK682RV26CL6">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+</span>
+<!-- </div> -->

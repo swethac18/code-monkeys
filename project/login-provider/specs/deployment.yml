@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: ldap
+  name: ldap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: ldap
+  template:
+    metadata:
+      labels:
+        run: ldap
+    spec:
+      containers:
+      - image: openfrontier/openldap-server
+        name: service
+        ports:
+        - containerPort: 389
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: ldap-config
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: login-provider
+  name: login-provider
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: login-provider
+  template:
+    metadata:
+      labels:
+        run: login-provider
+    spec:
+      containers:
+      - image: vjsamuel/login-provider
+        name: service
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: login-provider

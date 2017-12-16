@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: ldap
+  name: ldap
+spec:
+  ports:
+  - port: 389
+    protocol: TCP
+    targetPort: 389
+  selector:
+    run: ldap
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: login-provider
+  name: login-provider
+spec:
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    run: login-provider
+  type: NodePort

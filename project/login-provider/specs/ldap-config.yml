@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ldap-config
+data:
+  SLAPD_ADDITIONAL_MODULES: "memberof"
+  SLAPD_FORCE_RECONFIGURE: "true"
+  SLAPD_PASSWORD: "mysecretpassword"
+  SLAPD_DOMAIN: "ldap.s3u.rl"

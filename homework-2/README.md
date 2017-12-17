@@ -43,4 +43,4 @@ The REST APIs are deployed by default on:
 
 The webapp is deployed on:
 
-[http://localhost:8080/ui](http://localhost:8080/ui)
+[http://localhost:8081](http://localhost:8181)
